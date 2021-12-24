@@ -1,7 +1,26 @@
-AWSTemplateFormatVersion: "2010-09-09"
-Description:' lambda function'
-Resources:
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Testing" 
 
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    DependsOn: BucketPermission
+    Properties:
+      BucketName:!Ref rishita-my-bucket
+	  NotificationConfiguration:
+	   LambdaConfigurations:
+            - Event: 's3:ObjectCreated:*'
+            - Function: !GetAtt HelloLambdaFunction.Arn
+        
+      
+  BucketPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref HelloLambdaFunction
+      Principal: s3.amazonaws.com
+	  SourceArn: !Sub arn:aws:s3:::${rishita-my-bucket}
+  
   HelloLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -11,18 +30,19 @@ Resources:
           - Effect: Allow
             Principal:
               Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
-
-
-  HelloLambdaFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      FunctionName: HelloLambdaFunction
-      Role: !GetAtt HelloLambdaRole.Arn
-      Runtime: python3.7
-      Handler: index.my_handler
-      Code:
+            Action: sts:AssumeRole 
+    
+    HelloLambdaFunction:
+     Type: AWS::Lambda::Function
+     Properties:
+     FunctionName: HelloLambdaFunction
+     Role:!GetAtt HelloLambdaRole.Arn
+     Runtime: python3.7
+     Handler: index.my_handler
+     
+     Code:
         ZipFile: |
           def my_handler(event, context):
             message = 'Hello Lambda World!'
             return message
+   
