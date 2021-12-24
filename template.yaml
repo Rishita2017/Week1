@@ -7,8 +7,8 @@ Resources:
     DependsOn: BucketPermission
     Properties:
       BucketName:!Ref rishita-my-bucket
-	  NotificationConfiguration:
-	   LambdaConfigurations:
+      NotificationConfiguration:
+      LambdaConfigurations:
             - Event: 's3:ObjectCreated:*'
             - Function: !GetAtt HelloLambdaFunction.Arn
         
@@ -19,7 +19,7 @@ Resources:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref HelloLambdaFunction
       Principal: s3.amazonaws.com
-	  SourceArn: !Sub arn:aws:s3:::${rishita-my-bucket}
+      SourceArn: !Sub arn:aws:s3:::${rishita-my-bucket}
   
   HelloLambdaRole:
     Type: AWS::IAM::Role
