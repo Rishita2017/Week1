@@ -40,7 +40,7 @@ class Stack:
                 }
     def status_check(self):
         stack_status== self.client_cloud.describe_stacks(StackName=self.stack_name)
-        status = stack['Stacks'][0]['StackStatus']
+        status = stack_status['Stacks'][0]['StackStatus']
         return status
 
 
