@@ -20,6 +20,5 @@ with open('template.yaml', 'r') as cf_file:
 stack_obj = Stack("FirstStacks3lambda", cft_template, "ap-south-1", "rishita10", "datas3bucket")
 stack_obj.create_stack()
 stack_obj.update_stack()
-stack_obj.delete_object(dataBucketName)
 
 
