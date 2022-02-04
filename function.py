@@ -12,9 +12,11 @@ class Function:
             location = {'LocationConstraint': region}
             s3_client.create_bucket(Bucket=bucket_name,
                                         CreateBucketConfiguration=location)
-        except ClientError as e:
-            print(e)
-
+         except ClientError as e:
+            if e.response['Error']['Code'] == 'BucketAlreadyOwnedByYou':
+                print("Bucket already present")
+            else:
+                print(e)
 
     def create_zipfile(self, lambda_function_directory):
         try:
@@ -34,5 +36,8 @@ class Function:
         s3_client = boto3.client('s3')
         try:
             response = s3_client.upload_file(file_name, bucket, object_name)
-        except ClientError as e:
-            print(e)
+               except ClientError as e:
+            if e.response['Error']['Code'] == 'FileNotFoundError':
+                print("File was not found")
+            else:
+                print(e)
